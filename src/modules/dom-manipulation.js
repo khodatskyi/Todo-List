@@ -1,31 +1,46 @@
 
+import { createObjectTask } from './tasks'
+
+const newTaskArray = []
+
+
 
 export const buttonNewTask = document.getElementById('add_new_todo')
-// const newTaskContainer = document.getElementsByClassName('main-right')
+const newTaskContainer = document.getElementsByClassName('main-right')
+const newTaskContainerId = document.getElementById('container-tasks')
 
 buttonNewTask.addEventListener('click', () => createTaskWindow())
-
-
 
 function createTaskWindow() {
     // По нажатию на кнопку создаем форму для деталей задачи
     const addNewTask = document.createElement('div')
     addNewTask.id = 'window-add-new-task'
 
+    document.addEventListener('click', (event) => {
+        if (!addNewTask.contains(event.target) && event.target !== buttonNewTask) {
+            // Удалить форму, если клик был совершен вне формы и не на кнопке
+            addNewTask.remove()
+        }
+    });
+
     const taskForm = document.createElement('form') // Создаем форму
+    taskForm.id = 'form'
     const taskField = document.createElement('fieldset') // Создаем филдсет для название и описания
     taskField.id = 'task-field'
 
     const taskNameLabel = document.createElement('label') // Название задачи
     taskNameLabel.textContent = 'Название'
-    taskNameLabel.setAttribute('for', 'task-name')    
+    taskNameLabel.setAttribute('for', 'title')
     const taskName = document.createElement('input')
-    taskName.id = 'task-name'
+    taskName.setAttribute('name', 'title')
+    taskName.setAttribute('type', 'text')
+    taskName.id = 'task-title'
 
     const taskDescriptionLabel = document.createElement('label') // Описание задачи
     taskDescriptionLabel.textContent = 'Описание задачи'
-    taskDescriptionLabel.setAttribute('for', 'task-description')    
+    taskDescriptionLabel.setAttribute('for', 'task_description')
     const taskDescription = document.createElement('textarea')
+    taskDescription.setAttribute('name', 'task_description')
     taskName.id = 'task-description'
 
     const taskChooseField = document.createElement('fieldset') // Создаем филдсет для приоритета и даты
@@ -33,23 +48,25 @@ function createTaskWindow() {
 
     const taskPriorityLabel = document.createElement('label') // Выбор приоритетов
     taskPriorityLabel.textContent = 'Выбери приоритет задачи'
+    taskPriorityLabel.setAttribute('for', 'priority')
     const taskPrioritySelectLabel = document.createElement('select')
+    taskPrioritySelectLabel.setAttribute('name', 'priority')
     const taskPriorityOptionLabel = document.createElement('option')
-    taskPriorityOptionLabel.setAttribute('value', 'option1')
+    taskPriorityOptionLabel.setAttribute('value', 'Low')
     taskPriorityOptionLabel.textContent = 'Low'
-    const taskPriorityOptionLabel2 = document.createElement('option')
-    taskPriorityOptionLabel2.setAttribute('value', 'option2')
-    taskPriorityOptionLabel2.textContent = 'Medium'
-    const taskPriorityOptionLabel3 = document.createElement('option')
-    taskPriorityOptionLabel3.setAttribute('value', 'option3')
-    taskPriorityOptionLabel3.textContent = 'High'
+    const taskPriorityOptionLabelMedium = document.createElement('option')
+    taskPriorityOptionLabelMedium.setAttribute('value', 'Medium')
+    taskPriorityOptionLabelMedium.textContent = 'Medium'
+    const taskPriorityOptionLabelHigh = document.createElement('option')
+    taskPriorityOptionLabelHigh.setAttribute('value', 'High')
+    taskPriorityOptionLabelHigh.textContent = 'High'
 
     const taskDateLabel = document.createElement('label') // Выбор даты
     taskDateLabel.textContent = 'Выберите дату'
     taskDateLabel.setAttribute('for', 'datePicker')
     const taskDateInput = document.createElement('input')
     taskDateInput.setAttribute('type', 'date')
-    taskDateInput.setAttribute('name', 'date')
+    taskDateInput.setAttribute('name', 'datePicker')
     taskDateInput.id = 'datePicker'
 
     const buttonAddNewTask = document.createElement('button') // Кнопка для создания задачи
@@ -69,16 +86,175 @@ function createTaskWindow() {
     taskChooseField.appendChild(taskPriorityLabel); // Добавляем Приоритет в филдсет
     taskChooseField.appendChild(taskPrioritySelectLabel);
     taskPrioritySelectLabel.appendChild(taskPriorityOptionLabel);
-    taskPrioritySelectLabel.appendChild(taskPriorityOptionLabel2);
-    taskPrioritySelectLabel.appendChild(taskPriorityOptionLabel3);
+    taskPrioritySelectLabel.appendChild(taskPriorityOptionLabelMedium);
+    taskPrioritySelectLabel.appendChild(taskPriorityOptionLabelHigh);
 
     taskChooseField.appendChild(taskDateLabel); // Добавляем дату в филдсет
     taskChooseField.appendChild(taskDateInput);
 
     taskForm.appendChild(buttonAddNewTask); // Добавялем кнопку для создания задачи
 
+    buttonAddNewTask.addEventListener('click', () => {
+
+        const title = taskForm.elements.title.value;
+        const description = taskForm.elements.task_description.value;
+        const time = taskForm.elements.datePicker.value;
+        const priority = taskForm.elements.priority.value;
+
+        const createNewObjectTask = createObjectTask(title, description, time, priority)
+        newTaskArray.push(createNewObjectTask)
+        console.log(createNewObjectTask)
+        console.log(newTaskArray)
+        console.log(newTaskArray.length)
+        addNewTask.remove()
+
+
+        newTaskContainerId.innerHTML = ''
+
+        displayTasks(newTaskArray, newTaskContainer)
+
+    })
+
 }
 
+function displayTasks(array) {
+    array.forEach(e => {
+        const newTask = document.createElement('div')
+        newTask.classList.add('new-task')
+        const newTaskTitle = document.createElement('p')
+        newTaskTitle.textContent = e.title
+        const newTaskDescription = document.createElement('p')
+        newTaskDescription.textContent = e.description
+        const newTaskDate = document.createElement('p')
+        newTaskDate.textContent = e.time
+        const newTaskPriority = document.createElement('p')
+        newTaskPriority.textContent = e.priority
+
+        const newTaskEdit = document.createElement('button')
+        newTaskEdit.textContent = 'редактировать'
+        newTaskEdit.id = 'newTaskEditButton'
+        newTaskEdit.setAttribute('type', 'button')
+
+        const newTaskDelete = document.createElement('button')
+        newTaskDelete.textContent = 'удалить'
+        newTaskDelete.id = 'newTaskDeleteButton'
+        newTaskDelete.setAttribute('type', 'button')
+
+        newTaskDelete.addEventListener('click', () => {
+            console.log('УДАЛИТЬ!!!')
+            const indexToRemove = newTaskArray.findIndex(task => task === e);
+            if (indexToRemove !== -1) {
+                newTaskArray.splice(indexToRemove, 1);
+            }
+            newTaskContainerId.innerHTML = ''
+            displayTasks(newTaskArray, newTaskContainer)
+            console.log(`Мы удалили элемент - ${indexToRemove}`)
+        })
+
+        newTaskEdit.addEventListener('click', () => {
+
+            // console.log('Пора вносить изменения!')
+            const taskEditContainer = document.createElement('div')
+            taskEditContainer.id = 'taskEditContainer'
+
+            const taskNameLabel = document.createElement('label') // Название задачи
+            taskNameLabel.textContent = 'Название'
+            taskNameLabel.setAttribute('for', 'title')
+            const taskName = document.createElement('input')
+            taskName.value = e.title
+            taskName.setAttribute('name', 'title')
+            taskName.setAttribute('type', 'text')
+            taskName.id = 'task-title'
+
+            const taskDescriptionLabel = document.createElement('label') // Описание задачи
+            taskDescriptionLabel.textContent = 'Описание задачи'
+            taskDescriptionLabel.setAttribute('for', 'task_description')
+            const taskDescription = document.createElement('textarea')
+            taskDescription.value = e.description
+            taskDescription.setAttribute('name', 'task_description')
+            taskName.id = 'task-description'
+
+            const taskPriorityLabel = document.createElement('label') // Выбор приоритетов
+            taskPriorityLabel.textContent = 'Выбери приоритет задачи'
+            taskPriorityLabel.setAttribute('for', 'priority')
+            const taskPrioritySelectLabel = document.createElement('select')
+            taskPrioritySelectLabel.id = 'taskPrioritySelectLabel'
+            // taskPrioritySelectLabel.value = e.priority
+            taskPrioritySelectLabel.setAttribute('name', 'priority')
+            const taskPriorityOptionLabel = document.createElement('option')
+            taskPriorityOptionLabel.setAttribute('value', 'Low')
+            taskPriorityOptionLabel.textContent = 'Low'
+            const taskPriorityOptionLabelMedium = document.createElement('option')
+            taskPriorityOptionLabelMedium.setAttribute('value', 'Medium')
+            taskPriorityOptionLabelMedium.textContent = 'Medium'
+            const taskPriorityOptionLabelHigh = document.createElement('option')
+            taskPriorityOptionLabelHigh.setAttribute('value', 'High')
+            taskPriorityOptionLabelHigh.textContent = 'High'
+
+            const taskDateLabel = document.createElement('label') // Выбор даты
+            taskDateLabel.textContent = 'Выберите дату'
+            taskDateLabel.setAttribute('for', 'datePicker')
+            const taskDateInput = document.createElement('input')
+            taskDateInput.value = e.time
+            taskDateInput.setAttribute('type', 'date')
+            taskDateInput.setAttribute('name', 'datePicker')
+            taskDateInput.id = 'datePicker'
+
+            const buttonEditSaveTask = document.createElement('button') // Кнопка для создания задачи
+            buttonEditSaveTask.textContent = 'Сохранить задачу'
+            buttonEditSaveTask.id = 'buttonAddNewTask'
+            buttonEditSaveTask.setAttribute('type', 'button')
 
 
+            console.log(e)
+            document.body.appendChild(taskEditContainer)
+            taskEditContainer.appendChild(taskNameLabel)
+            taskEditContainer.appendChild(taskName)
+            taskEditContainer.appendChild(taskDescriptionLabel)
+            taskEditContainer.appendChild(taskDescription)
 
+            taskEditContainer.appendChild(taskPriorityLabel); // Добавляем Приоритет в филдсет
+            taskEditContainer.appendChild(taskPrioritySelectLabel);
+            taskPrioritySelectLabel.appendChild(taskPriorityOptionLabel);
+            taskPrioritySelectLabel.appendChild(taskPriorityOptionLabelMedium);
+            taskPrioritySelectLabel.appendChild(taskPriorityOptionLabelHigh);
+
+            taskEditContainer.appendChild(taskDateLabel); // Добавляем дату в филдсет
+            taskEditContainer.appendChild(taskDateInput);
+
+            taskEditContainer.appendChild(buttonEditSaveTask);
+
+            buttonEditSaveTask.addEventListener('click', () => {
+                console.log('Сохранить задачу')
+                e.title = taskName.value
+                e.description = taskDescription.value
+                e.priority = taskPrioritySelectLabel.value
+                e.time = taskDateInput.value
+
+                newTaskContainerId.innerHTML = ''
+                displayTasks(newTaskArray, newTaskContainer)
+                taskEditContainer.remove();
+
+                console.log(e)
+                console.log(newTaskArray)
+            })
+
+            document.addEventListener('click', (event) => { 
+                if (!taskEditContainer.contains(event.target)  && event.target !== newTaskEdit)  {
+                    taskEditContainer.remove();
+                }
+            })
+
+        })
+
+        newTaskContainerId.appendChild(newTask);
+        newTask.appendChild(newTaskTitle);
+        newTask.appendChild(newTaskDescription);
+        newTask.appendChild(newTaskDate);
+        newTask.appendChild(newTaskPriority);
+        newTask.appendChild(newTaskEdit);
+        newTask.appendChild(newTaskDelete);
+
+
+    });
+}

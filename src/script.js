@@ -2,4 +2,4 @@ import './styles/style.scss'
 import './modules/tasks'
 import './modules/dom-manipulation'
  
- console.log(11)
+ console.log('start')
