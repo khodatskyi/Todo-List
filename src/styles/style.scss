@@ -1,4 +1,3 @@
-
 * {
     margin: 0;
     padding: 0;
@@ -42,21 +41,22 @@ footer {
 .main-left {
     background-color: rgb(254, 220, 207);
     flex: 1;
+
     h2 {
         text-align: center;
     }
 }
 
 #add_new_todo {
-        width: 100%;
-        padding: 10px;
-        background-color: red;
-        color: aliceblue;
-        font-size: 1.2rem;
-        border: none;
-        border-radius: 30px;
-        cursor: pointer;
-    }
+    width: 100%;
+    padding: 10px;
+    background-color: red;
+    color: aliceblue;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+}
 
 
 
@@ -73,12 +73,15 @@ footer {
 
 #window-add-new-task {
     width: 600px;
-    height: 400px; 
-    background-color: #f0e1e1; 
-    position: absolute; 
-    top: 50%; /* Положение сверху */
-    left: 50%; /* Положение слева */
-    transform: translate(-50%, -50%); /* Центрирование по центру экрана */
+    height: 400px;
+    background-color: #f0e1e1;
+    position: absolute;
+    top: 50%;
+    /* Положение сверху */
+    left: 50%;
+    /* Положение слева */
+    transform: translate(-50%, -50%);
+    /* Центрирование по центру экрана */
     // border: 1px solid #000; /* Граница для окна */
     border-radius: 30px;
     padding: 10px;
@@ -90,10 +93,27 @@ footer {
     margin: 10px;
     padding: 5px;
     border: 1px solid black;
-    background-color: chartreuse;
+    background-color: rgb(255, 103, 136);
+
     p {
         margin-right: 15px;
     }
+}
+
+.new-task-checked {
+    display: flex;
+
+    margin: 10px;
+    padding: 5px;
+    border: 1px solid black;
+    background-color: rgb(130, 255, 96);
+
+    p {
+        margin-right: 15px;
+        text-decoration: line-through;
+
+    }
+
 }
 
 #newTaskDeleteButton {
@@ -112,13 +132,20 @@ footer {
 
 #taskEditContainer {
     width: 600px;
-    height: 400px; 
-    background-color: #ff8585; 
-    position: absolute; 
-    top: 50%; /* Положение сверху */
-    left: 50%; /* Положение слева */
-    transform: translate(-50%, -50%); /* Центрирование по центру экрана */
+    height: 400px;
+    background-color: #ff8585;
+    position: absolute;
+    top: 50%;
+    /* Положение сверху */
+    left: 50%;
+    /* Положение слева */
+    transform: translate(-50%, -50%);
+    /* Центрирование по центру экрана */
     // border: 1px solid #000; /* Граница для окна */
     border-radius: 30px;
     padding: 10px;
+}
+
+#checkBoxLabel {
+    color: #ff0000;
 }

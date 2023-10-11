@@ -12,6 +12,7 @@ export function createObjectTask(title, description, time, priority) {
         description,
         time,
         priority,
+        checkbox: false,
     }
 }
 
