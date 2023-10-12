@@ -1,13 +1,13 @@
 
 import { createObjectTask } from './tasks'
+import { lala, todayProject } from './projects'
 
 const newTaskArray = []
-
-
-
 export const buttonNewTask = document.getElementById('add_new_todo')
 const newTaskContainer = document.getElementsByClassName('main-right')
 const newTaskContainerId = document.getElementById('container-tasks')
+const allTasksButton = document.getElementById('all-tasks')
+const todayTasksButton = document.getElementById('today-tasks')
 
 buttonNewTask.addEventListener('click', () => createTaskWindow())
 
@@ -30,7 +30,6 @@ function createTaskWindow() {
 
     const taskNameLabel = document.createElement('label') // Название задачи
     taskNameLabel.textContent = 'Название'
-    // taskNameLabel.setAttribute('for', 'title')
     const taskName = document.createElement('input')
     taskName.setAttribute('name', 'title')
     taskName.setAttribute('type', 'text')
@@ -38,7 +37,6 @@ function createTaskWindow() {
 
     const taskDescriptionLabel = document.createElement('label') // Описание задачи
     taskDescriptionLabel.textContent = 'Описание задачи'
-    // taskDescriptionLabel.setAttribute('for', 'task_description')
     const taskDescription = document.createElement('textarea')
     taskDescription.setAttribute('name', 'task_description')
     taskName.id = 'task-description'
@@ -48,7 +46,6 @@ function createTaskWindow() {
 
     const taskPriorityLabel = document.createElement('label') // Выбор приоритетов
     taskPriorityLabel.textContent = 'Выбери приоритет задачи'
-    // taskPriorityLabel.setAttribute('for', 'priority')
     const taskPrioritySelectLabel = document.createElement('select')
     taskPrioritySelectLabel.setAttribute('name', 'priority')
     const taskPriorityOptionLabel = document.createElement('option')
@@ -91,16 +88,13 @@ function createTaskWindow() {
 
     taskChooseField.appendChild(taskDateLabel); // Добавляем дату в филдсет
     taskChooseField.appendChild(taskDateInput);
-
     taskForm.appendChild(buttonAddNewTask); // Добавялем кнопку для создания задачи
 
     buttonAddNewTask.addEventListener('click', () => {
-
         const title = taskForm.elements.title.value;
         const description = taskForm.elements.task_description.value;
         const time = taskForm.elements.datePicker.value;
         const priority = taskForm.elements.priority.value;
-        // let checkbox = false
 
         const createNewObjectTask = createObjectTask(title, description, time, priority)
         newTaskArray.push(createNewObjectTask)
@@ -109,13 +103,9 @@ function createTaskWindow() {
         console.log(newTaskArray.length)
         addNewTask.remove()
 
-
         newTaskContainerId.innerHTML = ''
-
         displayTasks(newTaskArray, newTaskContainer)
-
     })
-
 }
 
 function displayTasks(array) {
@@ -126,7 +116,7 @@ function displayTasks(array) {
         // Провеояем есть была ли поставлена галочка и если да, то выводим это на экран
         const newTask = document.createElement('div')
 
-        
+
         if (e.checkbox === true) {
             checkBox.checked = true
             newTask.classList.remove('new-task')
@@ -165,9 +155,8 @@ function displayTasks(array) {
         })
 
         newTaskEdit.addEventListener('click', () => {
+            let taskEditContainer = document.createElement('div')
 
-            // console.log('Пора вносить изменения!')
-            const taskEditContainer = document.createElement('div')
             taskEditContainer.id = 'taskEditContainer'
 
             const taskNameLabel = document.createElement('label') // Название задачи
@@ -181,7 +170,6 @@ function displayTasks(array) {
 
             const taskDescriptionLabel = document.createElement('label') // Описание задачи
             taskDescriptionLabel.textContent = 'Описание задачи'
-            // taskDescriptionLabel.setAttribute('for', 'task-description')
             const taskDescription = document.createElement('textarea')
             taskDescription.value = e.description
             taskDescription.setAttribute('name', 'task_description')
@@ -189,10 +177,8 @@ function displayTasks(array) {
 
             const taskPriorityLabel = document.createElement('label') // Выбор приоритетов
             taskPriorityLabel.textContent = 'Выбери приоритет задачи'
-            // taskPriorityLabel.setAttribute('for', 'priority')
             const taskPrioritySelectLabel = document.createElement('select')
             taskPrioritySelectLabel.id = 'taskPrioritySelectLabel'
-            // taskPrioritySelectLabel.value = e.priority
             taskPrioritySelectLabel.setAttribute('name', 'priority')
             const taskPriorityOptionLabel = document.createElement('option')
             taskPriorityOptionLabel.setAttribute('value', 'Low')
@@ -218,8 +204,6 @@ function displayTasks(array) {
             buttonEditSaveTask.id = 'buttonAddNewTask'
             buttonEditSaveTask.setAttribute('type', 'button')
 
-
-            console.log(e)
             document.body.appendChild(taskEditContainer)
             taskEditContainer.appendChild(taskNameLabel)
             taskEditContainer.appendChild(taskName)
@@ -234,17 +218,7 @@ function displayTasks(array) {
 
             taskEditContainer.appendChild(taskDateLabel); // Добавляем дату в филдсет
             taskEditContainer.appendChild(taskDateInput);
-
             taskEditContainer.appendChild(buttonEditSaveTask);
-
-            // checkBoxLabel.addEventListener('click', () => {
-            //     console.log('Мы нажали не чекбокс')
-            //     if (checkBoxTask.checked) {
-            //         console.log("Галочка установлена");
-            //     } else {
-            //         console.log("Галочка не установлена");
-            //     }
-            // })
 
             buttonEditSaveTask.addEventListener('click', () => {
                 console.log('Сохранить задачу')
@@ -256,9 +230,6 @@ function displayTasks(array) {
                 newTaskContainerId.innerHTML = ''
                 displayTasks(newTaskArray, newTaskContainer)
                 taskEditContainer.remove();
-
-                console.log(e)
-                console.log(newTaskArray)
             })
 
             document.addEventListener('click', (event) => {
@@ -266,11 +237,8 @@ function displayTasks(array) {
                     taskEditContainer.remove();
                 }
             })
-
         })
-
         newTaskContainerId.appendChild(newTask);
-        // newTask.appendChild(checkBoxLabel);
         newTask.appendChild(checkBox);
         newTask.appendChild(newTaskTitle);
         newTask.appendChild(newTaskDescription);
@@ -282,21 +250,30 @@ function displayTasks(array) {
         checkBox.addEventListener('click', () => {
             console.log('Мы нажали на чекбокс')
             if (checkBox.checked) {
-                console.log("Галочка установлена");
                 e.checkbox = true
                 newTask.classList.remove('new-task')
                 newTask.classList.add('new-task-checked')
                 console.log(e);
             } else {
-                console.log("Галочка не установлена");
                 e.checkbox = false
                 console.log(e);
                 newTask.classList.remove('new-task-checked')
                 newTask.classList.add('new-task')
-
             }
         })
-
-
     });
 }
+
+
+allTasksButton.addEventListener('click', () => {
+    newTaskContainerId.innerHTML = ''
+    displayTasks(newTaskArray)
+})
+
+todayTasksButton.addEventListener('click', () => {
+    const todayTasksArray = todayProject(newTaskArray)
+    newTaskContainerId.innerHTML = ''
+    displayTasks(todayTasksArray)
+})
+
+

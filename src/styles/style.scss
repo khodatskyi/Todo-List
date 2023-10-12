@@ -2,7 +2,6 @@
     margin: 0;
     padding: 0;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-
 }
 
 
@@ -15,7 +14,6 @@
 header {
     background-color: rgb(24, 46, 47);
     grid-row: 1 / 2;
-
 }
 
 #title {
@@ -41,9 +39,9 @@ footer {
 .main-left {
     background-color: rgb(254, 220, 207);
     flex: 1;
-
     h2 {
         text-align: center;
+        margin-bottom: 0.5rem;
     }
 }
 
@@ -58,8 +56,6 @@ footer {
     cursor: pointer;
 }
 
-
-
 .main-right {
     background-color: rgb(207, 194, 255);
     flex: 6;
@@ -70,31 +66,24 @@ footer {
 }
 
 // Окно для создания новой задачи
-
 #window-add-new-task {
     width: 600px;
     height: 400px;
     background-color: #f0e1e1;
     position: absolute;
     top: 50%;
-    /* Положение сверху */
     left: 50%;
-    /* Положение слева */
     transform: translate(-50%, -50%);
-    /* Центрирование по центру экрана */
-    // border: 1px solid #000; /* Граница для окна */
     border-radius: 30px;
     padding: 10px;
 }
 
 .new-task {
     display: flex;
-
     margin: 10px;
     padding: 5px;
     border: 1px solid black;
     background-color: rgb(255, 103, 136);
-
     p {
         margin-right: 15px;
     }
@@ -107,25 +96,19 @@ footer {
     padding: 5px;
     border: 1px solid black;
     background-color: rgb(130, 255, 96);
-
     p {
         margin-right: 15px;
         text-decoration: line-through;
-
     }
-
 }
 
 #newTaskDeleteButton {
     cursor: pointer;
     padding: 5px;
-
-
 }
 
 #newTaskEditButton {
     padding: 5px;
-
     cursor: pointer;
     margin: 0 30px;
 }
@@ -136,16 +119,31 @@ footer {
     background-color: #ff8585;
     position: absolute;
     top: 50%;
-    /* Положение сверху */
     left: 50%;
-    /* Положение слева */
     transform: translate(-50%, -50%);
-    /* Центрирование по центру экрана */
-    // border: 1px solid #000; /* Граница для окна */
     border-radius: 30px;
     padding: 10px;
 }
 
 #checkBoxLabel {
     color: #ff0000;
+}
+
+
+// Projects 
+
+.projects {
+    margin-top: 2rem;
+    button {
+        margin-bottom: 1rem;
+        background-color: rgb(71, 95, 255);
+        width: 100%;
+        padding: 10px;
+        color: aliceblue;
+        font-size: 1.2rem;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+
+    }
 }
