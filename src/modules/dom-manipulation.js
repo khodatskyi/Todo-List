@@ -97,7 +97,8 @@ function createTaskWindow() {
     taskChooseField.appendChild(taskDateInput);
     taskChooseField.appendChild(projectNameLabel); // Добавляем проект
     taskChooseField.appendChild(projectName);
-    taskForm.appendChild(buttonAddNewTask); // Добавялем кнопку для создания задачи
+    addNewTask.appendChild(buttonAddNewTask); // Добавялем кнопку для создания задачи
+    // taskForm.appendChild(buttonAddNewTask); // Добавялем кнопку для создания задачи
 
     buttonAddNewTask.addEventListener('click', () => {
         const title = taskForm.elements.title.value;
@@ -127,6 +128,11 @@ function displayTasks(array) {
         checkBox.id = 'checkBoxTask'
         // Провеояем есть была ли поставлена галочка и если да, то выводим это на экран
         const newTask = document.createElement('div')
+        newTask.id = 'new-task-container'
+        const newTaskLeft = document.createElement('div')
+        newTaskLeft.id = 'new-task-left'
+        const newTaskRight = document.createElement('div')
+        newTaskRight.id = 'new-task-right'
 
         if (e.checkbox === true) {
             checkBox.checked = true
@@ -219,25 +225,39 @@ function displayTasks(array) {
 
             const buttonEditSaveTask = document.createElement('button') // Кнопка для создания задачи
             buttonEditSaveTask.textContent = 'Сохранить задачу'
-            buttonEditSaveTask.id = 'buttonAddNewTask'
+            buttonEditSaveTask.id = 'buttonSaveTask'
             buttonEditSaveTask.setAttribute('type', 'button')
 
-            document.body.appendChild(taskEditContainer)
-            taskEditContainer.appendChild(taskNameLabel)
-            taskEditContainer.appendChild(taskName)
-            taskEditContainer.appendChild(taskDescriptionLabel)
-            taskEditContainer.appendChild(taskDescription)
+            const taskForm = document.createElement('form') // Создаем форму
+            taskForm.id = 'form'
 
-            taskEditContainer.appendChild(taskPriorityLabel); // Добавляем Приоритет в филдсет
-            taskEditContainer.appendChild(taskPrioritySelectLabel);
+            const taskField = document.createElement('fieldset')
+            taskField.id = 'fieldset-choose'
+
+            const taskField2 = document.createElement('fieldset')
+            taskField2.id = 'fieldset-choose'
+
+            document.body.appendChild(taskEditContainer)
+            taskEditContainer.appendChild(taskForm)
+            taskForm.appendChild(taskField)
+            taskField.appendChild(taskNameLabel)
+            taskField.appendChild(taskName)
+            taskField.appendChild(taskDescriptionLabel)
+            taskField.appendChild(taskDescription)
+
+
+            taskForm.appendChild(taskField2)
+
+            taskField2.appendChild(taskPriorityLabel); // Добавляем Приоритет в филдсет
+            taskField2.appendChild(taskPrioritySelectLabel);
             taskPrioritySelectLabel.appendChild(taskPriorityOptionLabel);
             taskPrioritySelectLabel.appendChild(taskPriorityOptionLabelMedium);
             taskPrioritySelectLabel.appendChild(taskPriorityOptionLabelHigh);
 
-            taskEditContainer.appendChild(taskDateLabel); // Добавляем дату в филдсет
-            taskEditContainer.appendChild(taskDateInput);
-            taskEditContainer.appendChild(projectNameLabel);
-            taskEditContainer.appendChild(projectName);
+            taskField2.appendChild(taskDateLabel); // Добавляем дату в филдсет
+            taskField2.appendChild(taskDateInput);
+            taskField2.appendChild(projectNameLabel);
+            taskField2.appendChild(projectName);
             taskEditContainer.appendChild(buttonEditSaveTask);
 
             console.log(newTaskArray)
@@ -266,13 +286,15 @@ function displayTasks(array) {
         })
 
         newTaskContainerId.appendChild(newTask);
-        newTask.appendChild(checkBox);
-        newTask.appendChild(newTaskTitle);
-        newTask.appendChild(newTaskDescription);
-        newTask.appendChild(newTaskDate);
-        newTask.appendChild(newTaskPriority);
-        newTask.appendChild(newTaskEdit);
-        newTask.appendChild(newTaskDelete);
+        newTask.appendChild(newTaskLeft);
+        newTask.appendChild(newTaskRight);
+        newTaskLeft.appendChild(checkBox);
+        newTaskLeft.appendChild(newTaskTitle);
+        newTaskLeft.appendChild(newTaskDescription);
+        newTaskLeft.appendChild(newTaskDate);
+        newTaskLeft.appendChild(newTaskPriority);
+        newTaskRight.appendChild(newTaskEdit);
+        newTaskRight.appendChild(newTaskDelete);
 
         checkBox.addEventListener('click', () => {
             console.log('Мы нажали на чекбокс')
