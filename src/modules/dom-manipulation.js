@@ -1,6 +1,6 @@
 
 import { createObjectTask } from './tasks'
-import { lala, todayProject } from './projects'
+import { todayProject, addNewProject } from './projects'
 
 const newTaskArray = []
 export const buttonNewTask = document.getElementById('add_new_todo')
@@ -8,6 +8,7 @@ const newTaskContainer = document.getElementsByClassName('main-right')
 const newTaskContainerId = document.getElementById('container-tasks')
 const allTasksButton = document.getElementById('all-tasks')
 const todayTasksButton = document.getElementById('today-tasks')
+const containerProjects = document.getElementById('projects-container-a');
 
 buttonNewTask.addEventListener('click', () => createTaskWindow())
 
@@ -33,7 +34,7 @@ function createTaskWindow() {
     const taskName = document.createElement('input')
     taskName.setAttribute('name', 'title')
     taskName.setAttribute('type', 'text')
-    taskName.id = 'task-title'
+    taskName.id = 'task_title'
 
     const taskDescriptionLabel = document.createElement('label') // Описание задачи
     taskDescriptionLabel.textContent = 'Описание задачи'
@@ -66,6 +67,12 @@ function createTaskWindow() {
     taskDateInput.setAttribute('name', 'datePicker')
     taskDateInput.id = 'datePicker'
 
+    const projectNameLabel = document.createElement('label') // Название проекта
+    projectNameLabel.textContent = 'Название проекта'
+    const projectName = document.createElement('input')
+    projectName.setAttribute('type', 'text')
+    projectName.id = 'projectTitle'
+
     const buttonAddNewTask = document.createElement('button') // Кнопка для создания задачи
     buttonAddNewTask.textContent = 'Создать задачу'
     buttonAddNewTask.id = 'buttonAddNewTask'
@@ -88,6 +95,8 @@ function createTaskWindow() {
 
     taskChooseField.appendChild(taskDateLabel); // Добавляем дату в филдсет
     taskChooseField.appendChild(taskDateInput);
+    taskChooseField.appendChild(projectNameLabel); // Добавляем проект
+    taskChooseField.appendChild(projectName);
     taskForm.appendChild(buttonAddNewTask); // Добавялем кнопку для создания задачи
 
     buttonAddNewTask.addEventListener('click', () => {
@@ -95,13 +104,16 @@ function createTaskWindow() {
         const description = taskForm.elements.task_description.value;
         const time = taskForm.elements.datePicker.value;
         const priority = taskForm.elements.priority.value;
+        const project = taskForm.elements.projectTitle.value;
 
-        const createNewObjectTask = createObjectTask(title, description, time, priority)
+        const createNewObjectTask = createObjectTask(title, description, time, priority, project)
         newTaskArray.push(createNewObjectTask)
         console.log(createNewObjectTask)
         console.log(newTaskArray)
         console.log(newTaskArray.length)
         addNewTask.remove()
+
+        addNewProject(newTaskArray)
 
         newTaskContainerId.innerHTML = ''
         displayTasks(newTaskArray, newTaskContainer)
@@ -115,7 +127,6 @@ function displayTasks(array) {
         checkBox.id = 'checkBoxTask'
         // Провеояем есть была ли поставлена галочка и если да, то выводим это на экран
         const newTask = document.createElement('div')
-
 
         if (e.checkbox === true) {
             checkBox.checked = true
@@ -144,13 +155,13 @@ function displayTasks(array) {
         newTaskDelete.setAttribute('type', 'button')
 
         newTaskDelete.addEventListener('click', () => {
-            console.log('УДАЛИТЬ!!!')
             const indexToRemove = newTaskArray.findIndex(task => task === e);
             if (indexToRemove !== -1) {
                 newTaskArray.splice(indexToRemove, 1);
             }
             newTaskContainerId.innerHTML = ''
             displayTasks(newTaskArray, newTaskContainer)
+            addNewProject(newTaskArray)
             console.log(`Мы удалили элемент - ${indexToRemove}`)
         })
 
@@ -199,6 +210,13 @@ function displayTasks(array) {
             taskDateInput.setAttribute('name', 'datePicker')
             taskDateInput.id = 'datePicker'
 
+            const projectNameLabel = document.createElement('label') // Название проекта
+            projectNameLabel.textContent = 'Название проекта'
+            const projectName = document.createElement('input')
+            projectName.setAttribute('type', 'text')
+            projectName.value = e.project
+            projectName.id = 'projectTitle'
+
             const buttonEditSaveTask = document.createElement('button') // Кнопка для создания задачи
             buttonEditSaveTask.textContent = 'Сохранить задачу'
             buttonEditSaveTask.id = 'buttonAddNewTask'
@@ -218,17 +236,25 @@ function displayTasks(array) {
 
             taskEditContainer.appendChild(taskDateLabel); // Добавляем дату в филдсет
             taskEditContainer.appendChild(taskDateInput);
+            taskEditContainer.appendChild(projectNameLabel);
+            taskEditContainer.appendChild(projectName);
             taskEditContainer.appendChild(buttonEditSaveTask);
 
+            console.log(newTaskArray)
+
+
             buttonEditSaveTask.addEventListener('click', () => {
-                console.log('Сохранить задачу')
+                console.log('Мы нажали на сохранить задачу')
                 e.title = taskName.value
                 e.description = taskDescription.value
                 e.priority = taskPrioritySelectLabel.value
                 e.time = taskDateInput.value
+                e.project = projectName.value
 
                 newTaskContainerId.innerHTML = ''
                 displayTasks(newTaskArray, newTaskContainer)
+
+                addNewProject(newTaskArray)
                 taskEditContainer.remove();
             })
 
@@ -238,6 +264,7 @@ function displayTasks(array) {
                 }
             })
         })
+
         newTaskContainerId.appendChild(newTask);
         newTask.appendChild(checkBox);
         newTask.appendChild(newTaskTitle);
@@ -275,5 +302,26 @@ todayTasksButton.addEventListener('click', () => {
     newTaskContainerId.innerHTML = ''
     displayTasks(todayTasksArray)
 })
+
+containerProjects.addEventListener('click', (event) => {
+    if (event.target.tagName === 'A') {
+        event.preventDefault(); // Предотвращение стандартного действия ссылки (перехода по URL)
+
+        // Ваши действия, которые вы хотите выполнить при нажатии на ссылку
+        console.log(`ссылка "${event.target.textContent}" была нажата`);
+        console.log(newTaskArray);
+
+        const projectArray = []
+        newTaskArray.forEach((obj) => {
+            if(obj.project === event.target.textContent) {
+                projectArray.push(obj)
+            }
+        })
+        console.log(projectArray)
+        newTaskContainerId.innerHTML = ''
+        displayTasks(projectArray)
+    }
+})
+
 
 
