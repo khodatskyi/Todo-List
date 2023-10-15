@@ -2,13 +2,14 @@
 import { createObjectTask } from './tasks'
 import { todayProject, addNewProject } from './projects'
 
-const newTaskArray = []
+let newTaskArray = []
 export const buttonNewTask = document.getElementById('add_new_todo')
 const newTaskContainer = document.getElementsByClassName('main-right')
 const newTaskContainerId = document.getElementById('container-tasks')
 const allTasksButton = document.getElementById('all-tasks')
 const todayTasksButton = document.getElementById('today-tasks')
 const containerProjects = document.getElementById('projects-container-a');
+// const buttonEditSaveTask = document.getElementById('buttonSaveTask');
 
 buttonNewTask.addEventListener('click', () => createTaskWindow())
 
@@ -114,6 +115,9 @@ function createTaskWindow() {
         console.log(newTaskArray.length)
         addNewTask.remove()
 
+        const newTaskArrayJSON = JSON.stringify(newTaskArray);
+        localStorage.setItem('myData', newTaskArrayJSON);
+
         addNewProject(newTaskArray)
 
         newTaskContainerId.innerHTML = ''
@@ -168,6 +172,10 @@ function displayTasks(array) {
             newTaskContainerId.innerHTML = ''
             displayTasks(newTaskArray, newTaskContainer)
             addNewProject(newTaskArray)
+
+            const newTaskArrayJSON = JSON.stringify(newTaskArray);
+            localStorage.setItem('myData', newTaskArrayJSON);
+
             console.log(`Мы удалили элемент - ${indexToRemove}`)
         })
 
@@ -260,6 +268,8 @@ function displayTasks(array) {
             taskField2.appendChild(projectName);
             taskEditContainer.appendChild(buttonEditSaveTask);
 
+
+
             console.log(newTaskArray)
 
 
@@ -273,6 +283,9 @@ function displayTasks(array) {
 
                 newTaskContainerId.innerHTML = ''
                 displayTasks(newTaskArray, newTaskContainer)
+
+                const newTaskArrayJSON = JSON.stringify(newTaskArray);
+                localStorage.setItem('myData', newTaskArrayJSON);
 
                 addNewProject(newTaskArray)
                 taskEditContainer.remove();
@@ -303,9 +316,17 @@ function displayTasks(array) {
                 newTask.classList.remove('new-task')
                 newTask.classList.add('new-task-checked')
                 console.log(e);
+                console.log(newTaskArray);
+
+                const newTaskArrayJSON = JSON.stringify(newTaskArray);
+                localStorage.setItem('myData', newTaskArrayJSON);
             } else {
                 e.checkbox = false
                 console.log(e);
+                console.log(newTaskArray);
+                const newTaskArrayJSON = JSON.stringify(newTaskArray);
+                localStorage.setItem('myData', newTaskArrayJSON);
+
                 newTask.classList.remove('new-task-checked')
                 newTask.classList.add('new-task')
             }
@@ -335,7 +356,7 @@ containerProjects.addEventListener('click', (event) => {
 
         const projectArray = []
         newTaskArray.forEach((obj) => {
-            if(obj.project === event.target.textContent) {
+            if (obj.project === event.target.textContent) {
                 projectArray.push(obj)
             }
         })
@@ -345,5 +366,17 @@ containerProjects.addEventListener('click', (event) => {
     }
 })
 
+// local storage
 
+function loadTasks() {
+    const newTaskArrayJSON = localStorage.getItem('myData');
+    if (newTaskArrayJSON) {
+        newTaskArray = JSON.parse(newTaskArrayJSON);
+        displayTasks(newTaskArray)
+        addNewProject(newTaskArray)
+    }
+}
+
+
+document.addEventListener('DOMContentLoaded', loadTasks);
 
